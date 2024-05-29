@@ -121,6 +121,14 @@
             },
             "help": {
               "$ref": "#/definitions/script-help"
+            },
+            "working_dir": {
+              "type": "string",
+              "description": "Working directory for the script.\n\nRelative paths are resolved against the project root."
+            },
+            "site_packages": {
+              "type": "boolean",
+              "description": "Allow the script to access the Python interpeter's global site-packages"
             }
           }
         },
