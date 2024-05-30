@@ -65,110 +65,95 @@
         }
       }
     },
+    "script-common": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/env-vars"
+        },
+        "env_file": {
+          "$ref": "#/definitions/env-file"
+        },
+        "help": {
+          "$ref": "#/definitions/script-help"
+        }
+      }
+    },
     "pdm-script": {
       "anyOf": [
         {
-          "oneOf": [
+          "allOf": [
             {
-              "type": "object",
-              "required": ["call"],
-              "additionalProperties": false,
-              "properties": {
-                "call": {
-                  "type": "string",
-                  "description": "Call to a python callable",
-                  "examples": [
-                    "foo_package.bar_module:main",
-                    "foo_package.bar_module:main('dev')"
-                  ]
-                },
-                "env": {
-                  "$ref": "#/definitions/env-vars"
-                },
-                "env_file": {
-                  "$ref": "#/definitions/env-file"
-                },
-                "help": {
-                  "$ref": "#/definitions/script-help"
-                }
-              }
+              "$ref": "#/definitions/script-common"
             },
             {
-              "type": "object",
-              "required": ["cmd"],
-              "additionalProperties": false,
-              "properties": {
-                "cmd": {
-                  "anyOf": [
-                    { "type": "string" },
-                    {
-                      "type": "array",
-                      "items": { "type": "string" }
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": ["call"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "call": {
+                      "type": "string",
+                      "description": "Call to a python callable",
+                      "examples": [
+                        "foo_package.bar_module:main",
+                        "foo_package.bar_module:main('dev')"
+                      ]
                     }
-                  ],
-                  "description": "Command that can be run from PDM's environment",
-                  "examples": [
-                    "flask run -p 54321",
-                    ["flask", "run", "-p", "54321"]
-                  ]
+                  }
                 },
-                "env": {
-                  "$ref": "#/definitions/env-vars"
+                {
+                  "type": "object",
+                  "required": ["cmd"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "cmd": {
+                      "anyOf": [
+                        { "type": "string" },
+                        {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      ],
+                      "description": "Command that can be run from PDM's environment",
+                      "examples": [
+                        "flask run -p 54321",
+                        ["flask", "run", "-p", "54321"]
+                      ]
+                    }
+                  }
                 },
-                "env_file": {
-                  "$ref": "#/definitions/env-file"
+                {
+                  "type": "object",
+                  "required": ["shell"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "shell": {
+                      "type": "string",
+                      "description": "Command that will be run in a shell environment",
+                      "examples": ["cat error.log|grep CRITICAL > critical.log"]
+                    }
+                  }
                 },
-                "help": {
-                  "$ref": "#/definitions/script-help"
-                }
-              }
-            },
-            {
-              "type": "object",
-              "required": ["shell"],
-              "additionalProperties": false,
-              "properties": {
-                "shell": {
-                  "type": "string",
-                  "description": "Command that will be run in a shell environment",
-                  "examples": ["cat error.log|grep CRITICAL > critical.log"]
-                },
-                "env": {
-                  "$ref": "#/definitions/env-vars"
-                },
-                "env_file": {
-                  "$ref": "#/definitions/env-file"
-                },
-                "help": {
-                  "$ref": "#/definitions/script-help"
-                }
-              }
-            },
-            {
-              "type": "object",
-              "required": ["composite"],
-              "additionalProperties": false,
-              "properties": {
-                "composite": {
-                  "type": "array",
-                  "items": { "type": "string" },
+                {
+                  "type": "object",
+                  "required": ["composite"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "composite": {
+                      "type": "array",
+                      "items": { "type": "string" },
 
-                  "description": "List of PDM scripts that should be run with this script",
-                  "examples": [
-                    ["lint", "test"],
-                    ["lint mypackage/", "test -v tests/"]
-                  ]
-                },
-                "env": {
-                  "$ref": "#/definitions/env-vars"
-                },
-                "env_file": {
-                  "$ref": "#/definitions/env-file"
-                },
-                "help": {
-                  "$ref": "#/definitions/script-help"
+                      "description": "List of PDM scripts that should be run with this script",
+                      "examples": [
+                        ["lint", "test"],
+                        ["lint mypackage/", "test -v tests/"]
+                      ]
+                    }
+                  }
                 }
-              }
+              ]
             }
           ]
         },
